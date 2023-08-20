@@ -46,21 +46,35 @@ function init() {
       });
     }
     if (answers.intro === "Add A Department") {
-      inquirer.prompt([
-        {
-            type:'input',
-          message: "Name of the Department",
-          name: 'name',
-
-        },
-      ]).then((answers) => {
-        db.query(`INSERT INTO department (name) VALUES (?)`,answers.name,function(err, results){
-            if(err){
-                console.log(err)
+      inquirer
+        .prompt([
+          {
+            type: "input",
+            message: "Name of the Department",
+            name: "name",
+          },
+        ])
+        .then((answers) => {
+          db.query(
+            `INSERT INTO department (name) VALUES (?)`,
+            answers.name,
+            function (err, results) {
+              if (err) {
+                console.log(err);
+              }
+              console.log(`Successfully Added ${answers.name}`);
             }
-            console.log(results)
-        })
-      });
+          );
+        });
+    }
+    if (answers.intro === "Add A Role") {
+      console.log("added");
+    }
+    if (answers.intro === "Add An Employee") {
+      console.log("added");
+    }
+    if (answers.intro === "Update An Employee") {
+      console.log("updated");
     }
   });
 }
