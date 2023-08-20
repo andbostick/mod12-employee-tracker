@@ -19,7 +19,7 @@ const questions = [
     choices: [
       "View All Departments",
       "View All Roles",
-      "View All Employess",
+      "View All Employees",
       "Add A Department",
       "Add A Role",
       "Add An Employee",
@@ -29,13 +29,40 @@ const questions = [
 ];
 
 function init() {
-    inquirer.prompt(questions).then((answers) => {
-        if(answers.intro === 'View All Departments'){
-            db.query((`SELECT * FROM department ORDER BY id`), function (err,results){
-                console.table(results)
-            })
-        }
-    })
+  inquirer.prompt(questions).then((answers) => {
+    if (answers.intro === "View All Departments") {
+      db.query(`SELECT * FROM department ORDER BY id`, function (err, results) {
+        console.table(results);
+      });
+    }
+    if (answers.intro === "View All Roles") {
+      db.query(`SELECT * FROM role ORDER BY id`, function (err, results) {
+        console.table(results);
+      });
+    }
+    if (answers.intro === "View All Employees") {
+      db.query(`SELECT * FROM employee ORDER BY id`, function (err, results) {
+        console.table(results);
+      });
+    }
+    if (answers.intro === "Add A Department") {
+      inquirer.prompt([
+        {
+            type:'input',
+          message: "Name of the Department",
+          name: 'name',
+
+        },
+      ]).then((answers) => {
+        db.query(`INSERT INTO department (name) VALUES (?)`,answers.name,function(err, results){
+            if(err){
+                console.log(err)
+            }
+            console.log(results)
+        })
+      });
+    }
+  });
 }
 
-init()
+init();
