@@ -68,7 +68,52 @@ function init() {
         });
     }
     if (answers.intro === "Add A Role") {
-      console.log("added");
+      inquirer
+        .prompt([
+          {
+            type: "input",
+            message: "Title Of Role?",
+            name: "title",
+          },
+          {
+            type: "input",
+            message: "Salary For Role?",
+            name: "salary",
+          },
+          {
+            type: "input",
+            message: "Department For Role",
+            name: "dept",
+          },
+        ])
+        .then((answers) => {
+          db.promise()
+            .query(
+              `SELECT id FROM department WHERE name=?`,
+              answers.dept,
+              function (err, results) {
+                if (err) {
+                  console.log(err);
+                }
+                return results;
+              }
+            )
+            .then((result) => {
+              console.log(result[0][0].id);
+              db.query(
+                `INSERT INTO role (title,salary,department_id) VALUES (?, ?,?)`,
+                [answers.title,
+                answers.salary,
+                result[0][0].id],
+                function (err, results) {
+                  if (err) {
+                    console.log(err);
+                  }
+                  console.log(`Succesfully added ${answers.title}`);
+                }
+              );
+            });
+        });
     }
     if (answers.intro === "Add An Employee") {
       console.log("added");
